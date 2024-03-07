@@ -1,12 +1,23 @@
-import React from "react";
-import { Image } from "@nextui-org/react";
-export default function Home() {
+import { Button } from "@nextui-org/react";
+import * as action from "@/actions";
+import { auth } from "@/auth";
+import Profile from "@/components/profile";
+
+export default async function Home() {
+  const session = await auth();
   return (
-    <Image
-      width={300}
-      height={200}
-      alt="NextUI hero Image with delay"
-      src="https://app.requestly.io/delay/5000/https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
-    />
+    <div>
+      <form action={action.signIn} className="m-5">
+        <Button type="submit">Singin</Button>
+      </form>
+
+      <form action={action.singOut} className="m-5">
+        <Button type="submit">Signout</Button>
+      </form>
+
+      {session?.user ? JSON.stringify(session?.user) : "Signed out"}
+
+      <Profile />
+    </div>
   );
 }
