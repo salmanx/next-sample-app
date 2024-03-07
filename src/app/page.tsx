@@ -11,7 +11,7 @@ export default async function Home() {
         <Button type="submit">Singin</Button>
       </form>
 
-      <form action={action.singOut} className="m-5">
+      <form action={action.signOut} className="m-5">
         <Button type="submit">Signout</Button>
       </form>
 
