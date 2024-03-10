@@ -30,10 +30,17 @@ export async function createTopic(
   formState: CreateTopicFormState,
   formData: FormData
 ): Promise<CreateTopicFormState> {
+  const session = await auth();
+  if (!session || !session.user) {
+    return {
+      errors: {
+        _error: ["You must signin to create topic"],
+      },
+    };
+  }
+
   const name = formData.get("name");
   const description = formData.get("description");
-  const session = await auth();
-
   const result = createTopicSchema.safeParse({
     name,
     description,
@@ -42,14 +49,6 @@ export async function createTopic(
   if (!result.success) {
     return {
       errors: result.error.flatten().fieldErrors,
-    };
-  }
-
-  if (!session || !session.user) {
-    return {
-      errors: {
-        _error: ["You must signin to create topic"],
-      },
     };
   }
 
