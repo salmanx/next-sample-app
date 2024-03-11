@@ -3,11 +3,13 @@
 import {
   NavbarItem,
   Button,
-  Avatar,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  User,
 } from "@nextui-org/react";
+
 import * as actions from "@/actions";
 
 import { useSession } from "next-auth/react";
@@ -20,16 +22,29 @@ export default function HeaderAuth() {
     authContent = null;
   } else if (session.data?.user) {
     authContent = (
-      <Popover placement="bottom">
-        <PopoverTrigger>
-          <Avatar src={session.data.user.image || ""} />
-        </PopoverTrigger>
-        <PopoverContent>
-          <form action={actions.signOut}>
-            <Button type="submit">Sign Out</Button>
-          </form>
-        </PopoverContent>
-      </Popover>
+      <>
+        <Dropdown placement="bottom-start">
+          <DropdownTrigger>
+            <User
+              as="button"
+              avatarProps={{
+                isBordered: true,
+                src: session.data.user.image || "",
+              }}
+              className="transition-transform"
+              // description={session.data.user.name}
+              name={session.data.user.name}
+            />
+          </DropdownTrigger>
+          <DropdownMenu aria-label="User Actions" variant="flat">
+            <DropdownItem key="logout">
+              <form action={actions.signOut}>
+                <button type="submit">Sign Out</button>
+              </form>
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </>
     );
   } else {
     authContent = (
